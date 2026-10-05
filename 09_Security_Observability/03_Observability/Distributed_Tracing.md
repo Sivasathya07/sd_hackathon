@@ -1,8 +1,5 @@
 # Distributed Tracing
 
-Owner: [Your Name] (Student 4)
-Diagram: Observability_Architecture.png
-
 ## 1. Purpose
 Follow one purchase across checkout, payment and order, including asynchronous hops, so a problem can be located in seconds.
 
