@@ -1,7 +1,5 @@
 # Structured Logging
 
-Owner: [Your Name] (Student 4)
-
 ## 1. Principle
 Logs are JSON, one event per line, never free text. Every critical business event shares core fields so we can search by `trace_id` or `reservation_id`.
 
