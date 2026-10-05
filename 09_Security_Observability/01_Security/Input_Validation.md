@@ -1,7 +1,5 @@
 # Input Validation
 
-Owner: [Your Name] (Student 4)
-
 ## 1. Principle
 Never trust input. Validate at the edge, then validate again inside each service.
 
@@ -44,6 +42,4 @@ Consumers validate message schema and version. Invalid messages are non-retryabl
 
 ## 7. Trade-offs
 Double validation (gateway and service) costs a little CPU but stops bypass if one layer is misconfigured.
-
-## 8. Jury answer
-Validation happens at the edge for speed, and again in services and the database for correctness. The customer identity always comes from the token, never from the body.
+.
