@@ -1,8 +1,5 @@
 # Alerting
 
-Owner: [Your Name] (Student 4)
-Every failure listed in 08_Scalability_Reliability/02_Failure_Handling/Failure_Matrix.md has a detector here.
-
 ## 1. Rules
 1. Alert on symptoms users feel and on invariants that must never break.
 2. Do not alert on every CPU blip. Too many alerts means nobody reads them.
@@ -61,6 +58,4 @@ Group related alerts, add durations (for example "for 5 minutes"), and review no
 ## 7. Trade-offs
 Tight thresholds catch problems early but may cause false alarms. We start with these values and tune after load testing.
 
-## 8. Jury answer
-- **How do you know the Order Service is down?** Paid-without-order and consumer lag alerts fire, the breaker-open metric changes, and a trace shows PaymentConfirmed published but not consumed.
-- **How do you prove no oversell?** The oversell counter stays 0, the invariant check passes each reconciler cycle, and ledger totals match inventory.
+
