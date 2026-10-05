@@ -1,8 +1,5 @@
 # 09 - Security and Observability Design
 
-Project: SALESTORM Flash Sale | Team: [TEAM_NAME]
-Owner: [Your Name] (Student 4 - Reliability Engineer)
-Deliverable: #17 Security and Observability Design
 
 ## Purpose
 How SALESTORM protects customers, payments and inventory from abuse and attack, and how the team detects problems quickly. Every failure in 08_Scalability_Reliability has a detector defined here.
@@ -44,11 +41,3 @@ How SALESTORM protects customers, payments and inventory from abuse and attack, 
 
 ## Assumptions
 JWT lifetime, rotation periods, rate limits, sampling rate, retention periods and alert thresholds are design choices, not measured values. Tune them with load testing and the team security policy.
-
-## Related folders
-- 05_API/ (401, 403, 429 responses; trace_id in headers)
-- 08_Scalability_Reliability/ (failure matrix that these alerts detect)
-- 10_ADR/ (JWT, mTLS and secrets decision record)
-
-## AI use
-If any file or diagram was drafted with AI assistance, see 11_AI_Assisted_Validation/AI_Usage_Note.md.
