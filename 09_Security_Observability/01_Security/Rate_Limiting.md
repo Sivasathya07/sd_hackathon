@@ -1,8 +1,4 @@
 # Rate Limiting and Abuse Protection
-
-Owner: [Your Name] (Student 4)
-Related: 08_Scalability_Reliability/01_Concurrency_and_Scalability/Throttling_and_Queueing.md
-
 ## 1. Why
 A flash sale attracts bots, scripts, replay attacks and floods. We must protect real customers and inventory.
 
@@ -47,4 +43,3 @@ Metrics: 429 count, WAF blocks, bot challenge failures, admission rate. Alert on
 - Strict limits may block some honest users (shared IPs). Per-user limits are preferred over per-IP where possible.
 - Rate limiting state in Redis adds a dependency, so a local fallback exists.
 
-> Limits are assumptions to be tuned during load testing.
