@@ -1,0 +1,74 @@
+@startuml
+
+autonumber
+
+title SALESTORM - Purchase & Inventory Reservation
+
+actor Customer
+
+participant "API Gateway" as Gateway
+participant "Checkout Facade" as Checkout
+participant "Inventory Service" as InventorySvc
+database "Redis Cluster" as Redis
+database "PostgreSQL DB" as DB
+
+Customer -> Gateway: POST /api/v1/checkout/reserve
+note right
+X-Idempotency-Key
+ProductId
+Quantity
+end note
+
+Gateway -> Checkout: processReservationRequest()
+
+Checkout -> InventorySvc: reserveInventory(customerId, productId, qty, key)
+
+InventorySvc -> Redis: SETNX idempotency_key
+
+alt Duplicate Request
+
+    Redis --> InventorySvc: Existing cached response
+    InventorySvc --> Checkout: Return existing reservation
+    Checkout --> Gateway: Existing Reservation DTO
+    Gateway --> Customer: HTTP 200 OK
+
+else New Request
+
+    InventorySvc -> DB: SELECT available_qty, version
+
+    alt Stock Unavailable
+
+        InventorySvc --> Checkout: InsufficientStockException
+        Checkout --> Gateway: Out of Stock
+        Gateway --> Customer: HTTP 409 Conflict
+
+    else Stock Available
+
+        InventorySvc -> DB: Optimistic UPDATE\navailable_qty -= qty\nreserved_qty += qty\nversion += 1
+
+        alt Version Matched
+
+            DB --> InventorySvc: Update Successful
+
+            InventorySvc -> DB: INSERT Reservation\nstatus = RESERVED\nexpires_at = NOW() + 15 min
+
+            DB --> InventorySvc: Reservation Created
+
+            InventorySvc --> Checkout: Reservation Result
+            Checkout --> Gateway: HTTP 201 Created
+            Gateway --> Customer: Reservation Details
+
+        else Version Mismatch
+
+            DB --> InventorySvc: Update Failed
+
+            loop Retry up to 3 attempts
+                InventorySvc -> DB: Re-read version
+                InventorySvc -> DB: Retry optimistic update
+            end
+
+        end
+    end
+end
+
+@enduml
