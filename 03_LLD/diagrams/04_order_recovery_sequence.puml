@@ -1,0 +1,64 @@
+@startuml
+
+autonumber
+
+title SALESTORM - Order Creation & Event Driven Recovery
+
+participant "Kafka Event Bus" as Kafka
+participant "Order Service" as OrderSvc
+database "Order Database" as OrderDB
+participant "Inventory Service" as InventorySvc
+participant "Dead Letter Queue" as DLQ
+participant "Reconciliation Job" as Job
+
+Kafka -> OrderSvc: PaymentSucceededEvent
+
+OrderSvc -> OrderDB: Check Order by ReservationID
+
+alt Order Already Exists
+
+    OrderDB --> OrderSvc: Order Found
+    OrderSvc -> Kafka: ACK Event
+
+else Order Does Not Exist
+
+    OrderSvc -> OrderDB: Create Order\nstatus = CONFIRMED
+
+    alt DB Write Successful
+
+        OrderDB --> OrderSvc: Order Created
+
+        OrderSvc -> Kafka: Publish OrderCreatedEvent
+        OrderSvc -> Kafka: ACK Event
+
+    else DB Failure
+
+        OrderDB --> OrderSvc: Database Error
+        OrderSvc -> Kafka: NACK
+
+        loop Retry up to 3 times
+
+            Kafka -> OrderSvc: Redeliver Event
+            OrderSvc -> OrderDB: Retry Order Creation
+
+        end
+
+        Kafka -> DLQ: Move Event to DLQ
+        DLQ --> Job: Failed Event
+
+        Job -> OrderSvc: Start Recovery
+        OrderSvc -> OrderDB: Retry Order Creation
+
+    end
+end
+
+== Compensating Transaction ==
+
+Kafka -> InventorySvc: PaymentFailedEvent
+
+InventorySvc -> InventorySvc: Release Reserved Stock
+
+InventorySvc -> InventorySvc: available_qty += quantity
+InventorySvc -> InventorySvc: reserved_qty -= quantity
+
+@enduml
