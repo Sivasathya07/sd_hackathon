@@ -1,8 +1,5 @@
 # Payment Data Security
 
-Owner: [Your Name] (Student 4)
-Related: 08_Scalability_Reliability/05_Payment_Order_Recovery/
-
 ## 1. Principle
 The safest card data is data we never receive.
 
@@ -45,7 +42,3 @@ Keep payment records as required for accounting and disputes. Delete or anonymis
 ## 8. Trade-offs
 Using hosted fields reduces control over the card form's look, but greatly reduces risk and compliance work.
 
-## 9. Jury answer
-We do not handle card data. We store a token and last 4 digits, so a database leak cannot expose usable card numbers.
-
-> Compliance details should be confirmed with the gateway provider's PCI guidance.
