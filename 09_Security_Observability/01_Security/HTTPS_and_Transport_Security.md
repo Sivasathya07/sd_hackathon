@@ -1,6 +1,5 @@
 # HTTPS and Transport Security
 
-Owner: [Your Name] (Student 4)
 
 ## 1. Rule
 No plain-text traffic anywhere. Every hop is encrypted and, inside the system, mutually authenticated.
@@ -49,4 +48,3 @@ Being inside the private network is not enough. Every internal call is authentic
 ## 8. Trade-offs
 Certificate rotation and mTLS add operational complexity and small latency. A service mesh automates this.
 
-> TLS versions and rotation periods are design choices.
