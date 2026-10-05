@@ -1,7 +1,5 @@
 # Secrets Management
 
-Owner: [Your Name] (Student 4)
-
 ## 1. What counts as a secret
 Database credentials, Redis password, broker credentials, payment gateway API key, webhook signing secret, JWT signing keys, TLS private keys, encryption keys.
 
@@ -44,6 +42,3 @@ Development, test and production use different secrets and different vault paths
 
 ## 9. Trade-offs
 The vault is a critical dependency, so it needs high availability and good access control. In exchange, we remove secrets from code and gain rotation and auditing.
-
-## 10. Jury answer
-Secrets are fetched from a vault at startup, cached in memory, rotated, and audited. None appear in code or logs.
